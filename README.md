@@ -300,6 +300,68 @@ NIELが実際の研究でどのように使用されているかの具体例と�
 
 この事例は、NIELが単なる理論的な指標ではなく、実際のデバイス性能予測に有効な実用的なツールであることを示しています。
 
+### DLTS分光法によるNIEL計算結果の妥当性評価
+
+NIELの計算結果を実験的に検証する具体例として、論文「NIEL DOSE and DLTS Analyses on Triple and Single Junction solar cells irradiated with electrons and protons」を紹介します。
+
+**論文情報:**
+- **タイトル**: NIEL DOSE and DLTS Analyses on Triple and Single Junction solar cells irradiated with electrons and protons
+- **著者**: Roberta Campesato, Carsten Baur, Mariacristina Casale, Massimo Gervasi, Enos Gombia, Erminio Greco, Aldo Kingma, Pier Giorgio Rancoita, Davide Rozza, Mauro Tacconi
+- **発表**: Proceedings of the World Conference on Photovoltaic Energy Conversion (WCPEC-7), Waikoloa, HAWAII, June 10-15, 2018
+- **所属機関**: CESI, INFN Milano Bicocca, Università di Milano Bicocca, IMEM-CNR Institute, ESA/ESTEC
+
+#### 研究の概要
+
+この論文では、多接合太陽電池（Triple Junction, TJ）と単接合太陽電池の放射線損傷を、**Displacement Damage Dose（DDD）法**と**DLTS（Deep Level Transient Spectroscopy）分光法**を組み合わせて解析しています。
+
+研究の特徴として、DLTS測定用のダイオードが、実際の多接合太陽電池のサブセル（InGaPトップセル、GaAsミドルセル）と**完全に同じエピタキシャル構造**を持つことが初めて実現されました。これにより、実際のデバイス構造での欠陥評価が可能になりました。
+
+#### DLTS分光法とNIELの組み合わせ
+
+**DLTS分光法とは:**
+- Deep Level Transient Spectroscopy（深準位過渡分光法）
+- 半導体中の深準位欠陥を検出・同定する手法
+- 欠陥のエネルギー準位、濃度、キャプチャ断面積を測定可能
+
+**NIELとの相関:**
+論文では、DLTS分光法により照射によって導入された欠陥（E1、E2トラップ）の性質を分析し、**Displacement Damage Dose（DDD）との強い相関**を観察しています。これにより、NIEL計算結果の妥当性を実験的に検証しています。
+
+#### 図7と図9による欠陥評価
+
+**図7: 電子線照射によるE1トラップ評価**
+- E1トラップの導入率を入射電子エネルギーに対してプロット
+- 右軸にGaAsサブセルでの電子のNIEL値を表示
+- E1トラップの導入率がNIEL値と相関していることを示す
+- これにより、NIEL計算が電子線による欠陥生成を正確に予測できることを検証
+
+**図9: 陽子線・電子線照射によるE2トラップ評価**
+- E2トラップの導入率を入射粒子エネルギーに対してプロット
+- 上段：陽子線照射の場合
+- 下段：電子線照射の場合
+- 右軸にGaAsサブセルでの陽子・電子のNIEL値を表示
+- 陽子と電子の両方で、E2トラップの導入率がNIEL値と相関していることを示す
+- これにより、NIEL計算が異なる粒子種（陽子・電子）による欠陥生成を統一的に予測できることを検証
+
+#### NIEL計算結果の妥当性評価
+
+この研究の重要な成果は以下の通りです：
+
+1. **実験的検証**: DLTS分光法による欠陥評価により、NIEL計算結果が実際の欠陥生成と一致することを確認
+2. **粒子種非依存性**: 陽子と電子の両方で、NIEL値と欠陥導入率の相関が観察される
+3. **エネルギー依存性**: 異なるエネルギーの粒子でも、NIEL値で統一的な評価が可能
+4. **実デバイス構造での検証**: 実際の太陽電池と同じ構造での検証により、実用性が確認される
+
+#### 実用的な意義
+
+この研究は、NIEL計算の妥当性を実験的に検証した重要な事例です：
+
+- **NIEL計算の信頼性**: DLTS分光法による検証により、NIEL計算が実際の欠陥生成を正確に予測できることが確認されました
+- **多接合太陽電池への応用**: 実際の多接合太陽電池構造での検証により、実用的な信頼性が確立されました
+- **欠陥の同定**: DLTSにより、特定の欠陥（E1、E2トラップ）とNIELの関係が明らかになりました
+- **宇宙ミッション設計**: 厳しい放射線環境（例：木星ミッション）での太陽電池性能予測にNIELを使用できることが確認されました
+
+この事例は、NIELが理論的な計算だけでなく、実験的な検証によりその妥当性が確認された信頼性の高い評価手法であることを示しています。
+
 ## 参考文献
 
 ### SR-NIEL関連
@@ -321,6 +383,17 @@ NIELが実際の研究でどのように使用されているかの具体例と�
 - **GitHub: solar_cell_radiation_damage_analysis_using_phits**: [https://github.com/shirokawakita/solar_cell_radiation_damage_analysis_using_phits](https://github.com/shirokawakita/solar_cell_radiation_damage_analysis_using_phits)
   - DDDから欠陥数密度への換算式の参考
   - PHITSを使用した太陽電池の放射線損傷解析
+
+### NIEL使用事例の論文
+
+- **NIEL Dose Dependence for Solar Cells Irradiated with Electrons and Protons** (arXiv:1312.0402)
+  - [https://arxiv.org/abs/1312.0402](https://arxiv.org/abs/1312.0402)
+  - Edのフィッティング手法とアニール効果の考察
+
+- **NIEL DOSE and DLTS Analyses on Triple and Single Junction solar cells irradiated with electrons and protons**
+  - Proceedings of the World Conference on Photovoltaic Energy Conversion (WCPEC-7), Waikoloa, HAWAII, June 10-15, 2018
+  - DLTS分光法によるNIEL計算結果の妥当性評価
+  - 図7、図9による電子線・陽子線による欠陥評価
 
 ### SR-NIELの引用文献
 
