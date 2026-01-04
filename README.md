@@ -329,17 +329,23 @@ NIELの計算結果を実験的に検証する具体例として、論文「NIEL
 #### 図7と図9による欠陥評価
 
 **図7: 電子線照射によるE1トラップ評価**
-- E1トラップの導入率を入射電子エネルギーに対してプロット
-- 右軸にGaAsサブセルでの電子のNIEL値を表示
+
+![Figure 7](図７.png)
+
+図7は、E1トラップの導入率を入射電子エネルギーに対してプロットしたものです。右軸にGaAsサブセルでの電子のNIEL値を表示しています。
+
 - E1トラップの導入率がNIEL値と相関していることを示す
+- 異なるエネルギーの電子線でも、NIEL値で統一的な評価が可能であることを確認
 - これにより、NIEL計算が電子線による欠陥生成を正確に予測できることを検証
 
 **図9: 陽子線・電子線照射によるE2トラップ評価**
-- E2トラップの導入率を入射粒子エネルギーに対してプロット
-- 上段：陽子線照射の場合
-- 下段：電子線照射の場合
-- 右軸にGaAsサブセルでの陽子・電子のNIEL値を表示
+
+![Figure 9](図9.png)
+
+図9は、E2トラップの導入率を入射粒子エネルギーに対してプロットしたものです。上段が陽子線照射、下段が電子線照射の場合を示しています。右軸にGaAsサブセルでの陽子・電子のNIEL値を表示しています。
+
 - 陽子と電子の両方で、E2トラップの導入率がNIEL値と相関していることを示す
+- 粒子種が異なっても、NIEL値で統一的な評価が可能であることを確認
 - これにより、NIEL計算が異なる粒子種（陽子・電子）による欠陥生成を統一的に予測できることを検証
 
 #### NIEL計算結果の妥当性評価
@@ -394,6 +400,13 @@ NIELの計算結果を実験的に検証する具体例として、論文「NIEL
   - Proceedings of the World Conference on Photovoltaic Energy Conversion (WCPEC-7), Waikoloa, HAWAII, June 10-15, 2018
   - DLTS分光法によるNIEL計算結果の妥当性評価
   - 図7、図9による電子線・陽子線による欠陥評価
+
+- **NIEL Dose Analysis on triple and single junction InGaP/GaAs/Ge solar cells irradiated with electrons, protons and neutrons** (arXiv:1911.08900)
+  - [https://arxiv.org/pdf/1911.08900](https://arxiv.org/pdf/1911.08900)
+  - Proceedings of the 46th IEEE PHOTOVOLTAIC SPECIALISTS CONFERENCE (PVSC 46), June 16-21, 2019, Chicago (USA)
+  - 電子、陽子、中性子照射による多接合太陽電池のNIEL DOSE解析
+  - DLTS分光法による中性子照射を含む包括的な欠陥評価
+  - 粒子種非依存性の確認（電子、陽子、中性子）
 
 ### SR-NIELの引用文献
 
