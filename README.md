@@ -114,19 +114,19 @@ DDDから欠陥数密度を計算します（NRTモデル：Norgett-Robinson-Tor
 
 - `niel_proton.csv` - ProtonのNIELデータ（CSV形式）
 - `niel_electron.csv` - ElectronのNIELデータ（CSV形式）
-- `niel_plot.png` - ProtonとElectronのNIEL値を比較したグラフ（PNG形式）
+- `images/niel_plot.png` - ProtonとElectronのNIEL値を比較したグラフ（PNG形式）
 
 ### 欠陥数密度データ
 
 - `defect_density_proton.csv` - Protonの欠陥数密度データ（CSV形式）
 - `defect_density_electron.csv` - Electronの欠陥数密度データ（CSV形式）
-- `defect_density_plot.png` - 欠陥数密度のグラフ（PNG形式）
+- `images/defect_density_plot.png` - 欠陥数密度のグラフ（PNG形式）
 
 ### 欠陥生成率データ
 
 - `defect_generation_rate_proton.csv` - Protonの欠陥生成率データ（CSV形式）
 - `defect_generation_rate_electron.csv` - Electronの欠陥生成率データ（CSV形式）
-- `defect_generation_rate_plot.png` - 欠陥生成率のグラフ（PNG形式）
+- `images/defect_generation_rate_plot.png` - 欠陥生成率のグラフ（PNG形式）
 
 ### CSVファイルの形式
 
@@ -159,19 +159,19 @@ DDDから欠陥数密度を計算します（NRTモデル：Norgett-Robinson-Tor
 
 ### NIEL値の比較
 
-![NIEL Plot](niel_plot.png)
+![NIEL Plot](images/niel_plot.png)
 
 ProtonとElectronのNIEL値をエネルギーに対してプロットしたグラフです。Protonは低エネルギー領域で高いNIEL値を示し、Electronは全体的に低いNIEL値を持ちます。
 
 ### 欠陥数密度
 
-![Defect Density Plot](defect_density_plot.png)
+![Defect Density Plot](images/defect_density_plot.png)
 
 放射線照射量1×10¹⁴ cm⁻²での欠陥数密度をエネルギーに対してプロットしたグラフです。Protonは低エネルギー領域で非常に高い欠陥数密度（最大約2.1×10¹⁹ cm⁻³）を示します。
 
 ### 欠陥生成率
 
-![Defect Generation Rate Plot](defect_generation_rate_plot.png)
+![Defect Generation Rate Plot](images/defect_generation_rate_plot.png)
 
 1粒子あたりの欠陥生成率をエネルギーに対してプロットしたグラフです。欠陥生成率はフルエンスに依存しない特性値で、Protonは最大約2.1×10⁵ cm⁻¹、Electronは最大約4.95 cm⁻¹の値を示します。
 
@@ -179,13 +179,13 @@ ProtonとElectronのNIEL値をエネルギーに対してプロットしたグ�
 
 #### 異なるEd値でのNIEL比較
 
-![NIEL Ed Comparison](niel_electron_ed_comparison.png)
+![NIEL Ed Comparison](images/niel_electron_ed_comparison.png)
 
 異なるEd値（10, 21, 30, 40, 50 eV）でのSiに対する電子線NIEL値を比較したグラフです。Ed値が大きくなるほど、同じエネルギーでのNIEL値は減少します。これは、Edが大きいほど、より多くのエネルギーが必要で、置換損傷が発生しにくくなるためです。
 
 #### 1MeV電子線での欠陥生成率のEd依存性
 
-![Defect Generation Rate Ed Dependency](defect_generation_rate_1mev_ed_dependency.png)
+![Defect Generation Rate Ed Dependency](images/defect_generation_rate_1mev_ed_dependency.png)
 
 1MeV電子線での欠陥生成率のEd依存性を示したグラフです。Ed値が大きくなるほど、欠陥生成率は減少します。Ed = 10 eVでは約4.03 cm⁻¹、Ed = 21 eVでは約1.24 cm⁻¹、Ed = 50 eVでは約0.22 cm⁻¹となります。この結果は、Ed値の選択が欠陥生成率の評価に重要な影響を与えることを示しています。
 
@@ -344,7 +344,7 @@ NIELの計算結果を実験的に検証する具体例として、論文「NIEL
 
 **図7: 電子線照射によるE1トラップ評価**
 
-![Figure 7](図７.png)
+![Figure 7](images/図７.png)
 
 図7は、E1トラップの導入率を入射電子エネルギーに対してプロットしたものです。右軸にGaAsサブセルでの電子のNIEL値を表示しています。
 
@@ -354,7 +354,7 @@ NIELの計算結果を実験的に検証する具体例として、論文「NIEL
 
 **図9: 陽子線・電子線照射によるE2トラップ評価**
 
-![Figure 9](図9.png)
+![Figure 9](images/図9.png)
 
 図9は、E2トラップの導入率を入射粒子エネルギーに対してプロットしたものです。上段が陽子線照射、下段が電子線照射の場合を示しています。右軸にGaAsサブセルでの陽子・電子のNIEL値を表示しています。
 
