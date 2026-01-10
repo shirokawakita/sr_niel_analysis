@@ -2,6 +2,20 @@
 
 SR-NIELのPDF結果ファイルからprotonとelectronのNIEL（Non-Ionizing Energy Loss）データを抽出し、CSV形式で保存、さらにグラフをPNG形式で出力するツールです。さらに、NIELデータから欠陥数密度と欠陥生成率を計算し、可視化します。
 
+このプロジェクトは[GitHubリポジトリ](https://github.com/shirokawakita/sr_niel_analysis)で公開されています。
+
+## ディレクトリ構成
+
+このプロジェクトは以下のディレクトリ構成になっています：
+
+- `src/` - Pythonスクリプト
+- `data/` - データファイル
+  - `data/csv/` - CSVデータファイル
+  - `data/pdf/` - PDFファイル（SR-NIEL結果、論文等）
+- `images/` - 生成されたグラフ画像（PNG形式）
+
+詳細は[DIRECTORY_STRUCTURE.md](DIRECTORY_STRUCTURE.md)を参照してください。
+
 ## データソース
 
 このツールで使用するNIELデータは、[SR-NIEL Web計算機](https://www.sr-niel.org/index.php/sr-niel-web-calculators)から取得したPDF結果ファイルを使用します。
@@ -46,19 +60,78 @@ pip install pdfplumber pandas matplotlib numpy
 
 ## 使用方法
 
-### コマンドライン引数
+### 主要スクリプト
+
+このプロジェクトには以下の主要スクリプトが含まれています：
+
+#### 1. NIELデータ抽出と基本解析
+
+**`src/extract_niel_data.py`** - NIELデータ抽出と欠陥計算のメインスクリプト
 
 このツールは、コマンドライン引数としてProtonとElectronのPDFファイルのパスを受け取ります：
 
 ```bash
-python extract_niel_data.py proton.pdf electron.pdf
+python src/extract_niel_data.py data/pdf/proton.pdf data/pdf/electron.pdf
 ```
 
 ファイル名にスペースが含まれる場合は、引用符で囲んでください：
 
 ```bash
-python extract_niel_data.py "SR-NIEL Results_silicon_proton.pdf" "SR-NIEL Results_silicon_electron.pdf"
+python src/extract_niel_data.py "data/pdf/SR-NIEL Results_silicon_proton.pdf" "data/pdf/SR-NIEL Results_silicon_electron.pdf"
 ```
+
+このスクリプトは以下を実行します：
+- PDFからNIELデータを抽出
+- DDD、欠陥数密度、欠陥生成率を計算
+- CSVファイルとグラフを生成
+
+#### 2. Ed依存性解析
+
+**`src/analyze_ed_dependency.py`** - Ed（置換閾値エネルギー）依存性解析スクリプト
+
+異なるEd値（10, 21, 30, 40, 50 eV）でのSi電子線NIELデータを比較し、1MeVでの欠陥生成率のEd依存性を可視化します：
+
+```bash
+python src/analyze_ed_dependency.py
+```
+
+このスクリプトは以下を生成します：
+- `data/csv/niel_electron_ed_*.csv` - 各Ed値でのNIELデータ
+- `data/csv/defect_generation_rate_1mev_ed_dependency.csv` - 1MeVでの欠陥生成率のEd依存性データ
+- `images/niel_electron_ed_comparison.png` - 異なるEd値でのNIEL比較グラフ
+- `images/defect_generation_rate_1mev_ed_dependency.png` - 1MeVでの欠陥生成率のEd依存性グラフ
+
+#### 3. GaAs太陽電池の陽子線照射解析
+
+**`src/extract_gaas_proton_niel.py`** - GaAsのProton NIELデータ抽出スクリプト
+
+```bash
+python src/extract_gaas_proton_niel.py
+```
+
+このスクリプトは以下を生成します：
+- `data/csv/niel_gaas_proton.csv` - GaAsのProton NIELデータ
+- `images/niel_gaas_proton_plot.png` - GaAsのProton NIELグラフ
+
+**`src/plot_gaas_ddd_degradation.py`** - DDD基準の劣化カーブ作成スクリプト
+
+```bash
+python src/plot_gaas_ddd_degradation.py
+```
+
+このスクリプトは以下を生成します：
+- `images/gaas_proton_ddd_degradation_plot.png` - DDD基準の劣化カーブグラフ
+
+**`src/plot_gaas_defect_density_degradation.py`** - 欠陥数密度基準の劣化カーブ作成スクリプト
+
+```bash
+python src/plot_gaas_defect_density_degradation.py
+```
+
+このスクリプトは以下を生成します：
+- `images/gaas_proton_defect_density_degradation_plot.png` - 欠陥数密度基準の劣化カーブグラフ
+
+**注意**: すべてのスクリプトは、プロジェクトルートディレクトリから実行してください。
 
 ### 入力ファイル
 
@@ -106,26 +179,49 @@ DDDから欠陥数密度を計算します（NRTモデル：Norgett-Robinson-Tor
 
 欠陥生成率は、1粒子あたりに生成される欠陥数密度を表す指標で、フルエンスに依存しない特性値です。
 
+欠陥数密度の計算式（NRTモデル）から導出すると、以下のように表現することもできます：
+
+```
+欠陥生成率 (cm⁻¹) = (NIEL × ρ × η) / (2 × Ed)
+```
+
+ここで：
+- NIEL: 非電離エネルギー損失 (MeV cm² g⁻¹)
+- ρ: 材料の密度 (g/cm³)
+- η: 欠陥生成効率（NRTモデル、0.8）
+- Ed: はじき出ししきい値 (eV)
+
+**参照文献：**
+
+この欠陥生成率（導入率：introduction rate）の式は、以下の論文で使用されています：
+
+- **NIEL DOSE and DLTS Analyses on Triple and Single Junction solar cells irradiated with electrons and protons**
+  - Proceedings of the World Conference on Photovoltaic Energy Conversion (WCPEC-7), Waikoloa, HAWAII, June 10-15, 2018
+  - この論文では、DLTS分光法により測定された欠陥導入率（E1、E2トラップの導入率）がNIEL値と相関していることが示されています（図7、図9参照）
+  - 欠陥導入率は、1粒子あたりに導入される欠陥数密度として定義され、単位は cm⁻¹ です
+
+欠陥数密度の計算式は、NRTモデル（Norgett-Robinson-Torrensモデル）に基づいており、原子炉材料の放射線損傷評価に使用される標準的なモデルです。
+
 ## 出力ファイル
 
 スクリプトを実行すると、以下のファイルが生成されます：
 
 ### NIELデータ
 
-- `niel_proton.csv` - ProtonのNIELデータ（CSV形式）
-- `niel_electron.csv` - ElectronのNIELデータ（CSV形式）
+- `data/csv/niel_proton.csv` - ProtonのNIELデータ（CSV形式）
+- `data/csv/niel_electron.csv` - ElectronのNIELデータ（CSV形式）
 - `images/niel_plot.png` - ProtonとElectronのNIEL値を比較したグラフ（PNG形式）
 
 ### 欠陥数密度データ
 
-- `defect_density_proton.csv` - Protonの欠陥数密度データ（CSV形式）
-- `defect_density_electron.csv` - Electronの欠陥数密度データ（CSV形式）
+- `data/csv/defect_density_proton.csv` - Protonの欠陥数密度データ（CSV形式）
+- `data/csv/defect_density_electron.csv` - Electronの欠陥数密度データ（CSV形式）
 - `images/defect_density_plot.png` - 欠陥数密度のグラフ（PNG形式）
 
 ### 欠陥生成率データ
 
-- `defect_generation_rate_proton.csv` - Protonの欠陥生成率データ（CSV形式）
-- `defect_generation_rate_electron.csv` - Electronの欠陥生成率データ（CSV形式）
+- `data/csv/defect_generation_rate_proton.csv` - Protonの欠陥生成率データ（CSV形式）
+- `data/csv/defect_generation_rate_electron.csv` - Electronの欠陥生成率データ（CSV形式）
 - `images/defect_generation_rate_plot.png` - 欠陥生成率のグラフ（PNG形式）
 
 ### CSVファイルの形式
@@ -382,9 +478,125 @@ NIELの計算結果を実験的に検証する具体例として、論文「NIEL
 
 この事例は、NIELが理論的な計算だけでなく、実験的な検証によりその妥当性が確認された信頼性の高い評価手法であることを示しています。
 
+### GaAs太陽電池の陽子線照射による劣化評価：DDD基準による統一化
+
+低エネルギー陽子線照射による太陽電池の劣化評価において、Displacement Damage Dose (DDD)を基準として異なる陽子エネルギーの劣化カーブを統一化する手法を実装しました。この手法は、論文「Low Energy Proton Irradiation Effects on Silicon Solar Cells」を参考にしています。
+
+**論文情報:**
+- **タイトル**: Low Energy Proton Irradiation Effects on Silicon Solar Cells
+- **ファイル**: 2002LowEnergyProtonsSi.pdf
+- **内容**: 低エネルギー陽子線照射によるシリコン太陽電池の劣化評価と、DDD基準による統一化手法
+
+#### 実装内容
+
+**使用データ:**
+- `data/csv/GaAs_proton_irradiation_data.csv`: GaAs太陽電池の陽子線照射によるPmax劣化データ
+  - 陽子エネルギー: 50 keV, 100 keV, 200 keV, 300 keV, 500 keV, 1 MeV, 3 MeV, 9.5 MeV
+  - 各エネルギーでのNormalized Maximum Power vs Proton Fluence
+- `data/csv/niel_gaas_proton.csv`: GaAsのProton NIELデータ（SR-NIEL計算結果）
+
+**実装スクリプト:**
+- `src/extract_gaas_proton_niel.py`: GaAsのProton NIELデータ抽出スクリプト（`niel_gaas_proton.csv`と`niel_gaas_proton_plot.png`を生成）
+- `src/plot_gaas_ddd_degradation.py`: DDD基準の劣化カーブ作成スクリプト
+- `src/plot_gaas_defect_density_degradation.py`: 欠陥数密度基準の劣化カーブ作成スクリプト
+
+#### DDD基準への変換手法
+
+1. **NIEL値の補間**: 各陽子エネルギーに対応するNIEL値を、NIELデータから対数補間により取得
+   - 50 keV (0.05 MeV): NIEL = 0.525410 MeV cm²/g
+   - 100 keV (0.1 MeV): NIEL = 0.321180 MeV cm²/g
+   - 200 keV (0.2 MeV): NIEL = 0.188240 MeV cm²/g
+   - 300 keV (0.3 MeV): NIEL = 0.135550 MeV cm²/g
+   - 500 keV (0.5 MeV): NIEL = 0.089413 MeV cm²/g
+   - 1 MeV: NIEL = 0.049467 MeV cm²/g
+   - 3 MeV: NIEL = 0.018421 MeV cm²/g
+   - 9.5 MeV: NIEL = 0.007189 MeV cm²/g
+
+2. **DDD計算**: 各fluence値に対して `DDD = NIEL × fluence` を計算
+   - DDDの単位: MeV/g
+   - NIELの単位: MeV cm²/g
+   - Fluenceの単位: cm⁻²
+
+3. **データ変換**: 各陽子エネルギーでの劣化データ（fluence, Normalized Maximum Power）をDDD基準に変換
+
+#### 結果の可視化
+
+**1. DDD基準の劣化カーブ**
+
+![GaAs Proton DDD Degradation](images/gaas_proton_ddd_degradation_plot.png)
+
+**グラフの特徴:**
+- **X軸**: Displacement Damage Dose (MeV/g) - 対数スケール
+- **Y軸**: Normalized Maximum Power - 線形スケール
+- **各陽子エネルギー**: 異なる色とマーカーで表示
+- **目盛**: 主要目盛と補助目盛の両方がグラフの内側に表示
+
+**重要な発見:**
+- 異なる陽子エネルギー（50 keV ～ 9.5 MeV）での劣化カーブが、DDD基準で統一的に表現される
+- 低エネルギー陽子（50-500 keV）と高エネルギー陽子（1-9.5 MeV）の両方が、同じDDDスケールで比較可能
+- これにより、異なるエネルギーでの照射試験結果を統一的に評価できる
+
+**2. 欠陥数密度基準の劣化カーブ**
+
+![GaAs Proton Defect Density Degradation](images/gaas_proton_defect_density_degradation_plot.png)
+
+**グラフの特徴:**
+- **X軸**: Defect Density (cm⁻³) - 対数スケール
+- **Y軸**: Normalized Maximum Power - 線形スケール
+- **各陽子エネルギー**: 異なる色とマーカーで表示
+- **目盛**: 主要目盛と補助目盛の両方がグラフの内側に表示
+
+**計算パラメータ:**
+- **密度 (ρ)**: 5.32 g/cm³（GaAs）
+- **欠陥生成効率 (η)**: 0.8（NRTモデル）
+- **はじき出ししきい値 (Ed)**: 10 eV（照射直後の値）
+
+**計算式:**
+```
+欠陥数密度 (cm⁻³) = (DDD × ρ × η) / (2 × Ed)
+```
+
+**重要な発見:**
+- DDD基準と同様に、欠陥数密度基準でも異なる陽子エネルギーの劣化カーブが統一的に表現される
+- 低エネルギー陽子（50-100 keV）は、同じ欠陥数密度でも比較的高いNormalized Maximum Powerを維持
+- 高エネルギー陽子（200 keV ～ 9.5 MeV）のカーブは互いに近い劣化挙動を示し、欠陥数密度基準での統一性が確認される
+- 欠陥数密度が10¹⁵ cm⁻³以上になると、すべてのエネルギーでNormalized Maximum Powerが0.4-0.5程度まで低下
+
+#### 実用的な意義
+
+この手法により、以下の点で実用的な価値が得られます：
+
+1. **試験結果の統一評価**: 異なる陽子エネルギーでの照射試験結果を、DDD基準および欠陥数密度基準で統一的に比較可能
+2. **性能予測の精度向上**: DDD基準および欠陥数密度基準の劣化カーブから、任意の陽子エネルギーとfluenceでの性能劣化を予測可能
+3. **宇宙環境での応用**: 宇宙環境でのスペクトル陽子線照射による劣化を、DDD基準および欠陥数密度基準で評価可能
+4. **材料比較**: 異なる材料（GaAs、Si等）の放射線耐性を、DDD基準および欠陥数密度基準で比較評価可能
+5. **劣化メカニズムの理解**: DDD基準は照射欠陥量の物理的指標として、欠陥数密度基準は材料内の実際の欠陥量との関係を示す指標として、それぞれ異なる観点から劣化メカニズムを理解するのに役立つ
+
+#### 技術的詳細
+
+**実行方法:**
+```bash
+# DDD基準の劣化カーブ作成
+python src/plot_gaas_ddd_degradation.py
+
+# 欠陥数密度基準の劣化カーブ作成
+python src/plot_gaas_defect_density_degradation.py
+```
+
+**出力ファイル:**
+- `images/niel_gaas_proton_plot.png`: GaAsのProton NIELグラフ（`extract_gaas_proton_niel.py`で生成）
+- `images/gaas_proton_ddd_degradation_plot.png`: DDD基準の劣化カーブグラフ
+- `images/gaas_proton_defect_density_degradation_plot.png`: 欠陥数密度基準の劣化カーブグラフ
+
+**注意**: スクリプトはプロジェクトルートディレクトリから実行してください。
+
+この実装は、論文のFig.2形式に従い、DDD基準と欠陥数密度基準の両方で異なる陽子エネルギーの劣化カーブを統一的に表示することを実現しています。DDD基準のグラフは照射欠陥量の物理的指標として、欠陥数密度基準のグラフは材料内の実際の欠陥量との関係を示す指標として、それぞれ異なる観点から劣化メカニズムを理解するのに役立ちます。
+
 ### Ed（置換閾値エネルギー）依存性解析
 
 NIEL計算において、Ed（displacement threshold energy：置換閾値エネルギー）は重要なパラメータです。Edは、原子を格子位置から置換するために必要な最小エネルギーを表します。このパラメータは、材料の種類や照射後のアニール状態によって変化する可能性があります。
+
+この解析は、`src/analyze_ed_dependency.py`スクリプトを使用して実行します。
 
 #### Ed値の影響
 
@@ -408,6 +620,8 @@ Defect Generation Rate = (NIEL × ρ × η) / (2 × Ed)
 - ρ = 2.33 g/cm³（シリコン密度）
 - η = 0.8（NRTモデル効率）
 - Ed: 置換閾値エネルギー（eV）
+
+この式は、NRTモデルに基づく欠陥数密度の計算式から導出され、DLTS分光法による欠陥導入率の評価で使用されています（「NIEL DOSE and DLTS Analyses on Triple and Single Junction solar cells irradiated with electrons and protons」参照）。
 
 計算結果は以下の通りです：
 
@@ -481,6 +695,11 @@ Defect Generation Rate = (NIEL × ρ × η) / (2 × Ed)
   - Proceedings of the World Conference on Photovoltaic Energy Conversion (WCPEC-7), Waikoloa, HAWAII, June 10-15, 2018
   - DLTS分光法によるNIEL計算結果の妥当性評価
   - 図7、図9による電子線・陽子線による欠陥評価
+
+- **Low Energy Proton Irradiation Effects on Silicon Solar Cells** (2002LowEnergyProtonsSi.pdf)
+  - 低エネルギー陽子線照射による太陽電池の劣化評価
+  - DDD基準による異なる陽子エネルギーの劣化カーブの統一化手法
+  - Fig.2形式でのDDD vs Normalized Maximum Powerの可視化
 
 - **NIEL Dose Analysis on triple and single junction InGaP/GaAs/Ge solar cells irradiated with electrons, protons and neutrons** (arXiv:1911.08900)
   - [https://arxiv.org/pdf/1911.08900](https://arxiv.org/pdf/1911.08900)
